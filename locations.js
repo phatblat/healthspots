@@ -24,6 +24,11 @@ var app = express()
 app.set('port', process.env.PORT || 3000)
 app.use(express.static(path.join(__dirname, 'public')))
 
+// set up paths
+app.get('/', function (request, response) {
+    response.sendfile('index.html');
+})
+
 // start server
 http.createServer(app).listen(app.get('port'), function() {
   log.info('Express server listening on port ' + app.get('port'))
