@@ -19,6 +19,8 @@ function initialize() {
   }
 }
 
+initialize()
+
 // KP facility data
 var sample = {
     "facilities": [{
