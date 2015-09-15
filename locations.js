@@ -12,17 +12,25 @@ function logDelimit() {
 }
 
 // initialization
+var KP_KEY = process.env.KP_KEY;
+
 function initialize() {
   if (process.env.VCAP_SERVICES) {
     var vcapServices = JSON.parse(process.env.VCAP_SERVICES)
-    log.info(process.env.VCAP_SERVICES)
   }
   else {
     log.warn('VCAP_SERVICES environment variable is not set')
   }
 }
-
 initialize()
+
+var TWITTER_CREDENTIALS = {
+  "username": "91271250-1e02-4c8e-b197-c8ed5137ff58",
+  "password": "TCIUqoUQ6H",
+  "host": "cdeservice.mybluemix.net",
+  "port": 443,
+  "url": "https://91271250-1e02-4c8e-b197-c8ed5137ff58:TCIUqoUQ6H@cdeservice.mybluemix.net"
+}
 
 // KP facility data
 var sample = {
@@ -36,7 +44,7 @@ var sample = {
     }]
 }
 
-function getKPLocations(zipcode, callback) {
+function getKPLocations(zipcode, key, callback) {
     log.info('Beginning finding facilities for: ' + zipcode)
 
     var snapshotData = []
@@ -46,7 +54,7 @@ function getKPLocations(zipcode, callback) {
       path: '/v1/locator/facility?zip=' + zipcode,
       method: 'GET',
       headers: {
-        'consumer-key': 'T3GUyGKiw1FrPaSfSe31BBFhXMAKWfXT'
+        'consumer-key': key
       }
     }
 
@@ -107,7 +115,7 @@ app.get('/facilities', function (request, response) {
 
   response.setHeader('Content-Type', 'application/json')
 
-  getKPLocations(zipcode, function (locationData) {
+  getKPLocations(zipcode, KP_KEY, function (locationData) {
     response.end(JSON.stringify({
       facilities: locationData
     }))
