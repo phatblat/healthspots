@@ -7,6 +7,7 @@ var path = require('path')
 
 // custom module
 var kp = require('./kp.js')
+var sentiment = require('./sentiment')
 
 // logger
 var log = ibmbluemix.getLogger()
@@ -15,7 +16,7 @@ function logDelimit() {
 }
 
 // initialization
-var KP_KEY = process.env.KP_KEY;
+var KP_KEY = process.env.KP_KEY
 
 function initialize() {
   if (process.env.VCAP_SERVICES) {
@@ -54,7 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // set up paths
 app.get('/', function (request, response) {
-    response.sendfile('index.html');
+    response.sendfile('index.html')
 })
 
 app.get('/facilities', function (request, response) {
@@ -71,6 +72,59 @@ app.get('/facilities', function (request, response) {
     }))
     logDelimit()
   })
+})
+
+app.get('/facilitiesAndSentiments', function (request, response) {
+    var zipcode = request.query.zipcode
+
+    log.info('Finding facilities and sentiments for: ' + zipcode)
+
+    response.setHeader('Content-Type', 'application/json')
+
+    kp.getKPLocations(zipcode, KP_KEY, function (locationData) {
+        var numberOfLocations = locationData.length - 1
+
+        log.info('number of locations: ' + locationData.length)
+
+        var negativeResponseCount = 0
+        var positiveResponseCount = 0
+
+        locationData.forEach(function (item) {
+
+            response.setHeader('Content-Type', 'application/json')
+
+            sentiment.sendSentimentRequest(item.name, 'positive', TWITTER_CREDENTIALS, function (parsedData) {
+
+                if (parsedData !== 'error') {
+
+                    var positiveResponse = JSON.parse(parsedData)
+
+                    locationData[positiveResponseCount].positive = positiveResponse.search.results
+
+                    positiveResponseCount++
+
+                    sentiment.sendSentimentRequest(item.name, 'negative', TWITTER_CREDENTIALS, function (negData) {
+                        var negativeResponse = JSON.parse(negData)
+
+                        locationData[negativeResponseCount].negative = negativeResponse.search.results
+
+                        negativeResponseCount++
+
+                        if (negativeResponseCount === numberOfLocations) {
+                            response.end(JSON.stringify({
+                                facilities: locationData
+                            }))
+
+                            log.info('Data for ' + numberOfLocations + ' from ' + locationData.length + ' possible locations ')
+                        }
+                    })
+
+                } else {
+                    numberOfLocations = numberOfLocations - 1
+                }
+            })
+        })
+    })
 })
 
 // start server
