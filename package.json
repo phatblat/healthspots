@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/phatblat/healthspots#readme",
   "dependencies": {
+    "express": "^4.13.3",
     "ibmbluemix": "^1.0.0"
   }
 }
