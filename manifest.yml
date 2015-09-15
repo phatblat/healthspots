@@ -1,6 +1,6 @@
 ---
 applications:
-- name: healthspots
+- name: kpapp140915chatelain
   disk_quota: 1024M
   host: kpapp140915chatelain
   command: node locations.js
