@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/phatblat/healthspots/issues"
   },
-  "homepage": "https://github.com/phatblat/healthspots#readme"
+  "homepage": "https://github.com/phatblat/healthspots#readme",
+  "dependencies": {
+    "ibmbluemix": "^1.0.0"
+  }
 }
