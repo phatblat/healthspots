@@ -8,6 +8,17 @@ var path = require('path')
 // logger
 var log = ibmbluemix.getLogger()
 
+// initialization
+function initialize() {
+  if (process.env.VCAP_SERVICES) {
+    var vcapServices = JSON.parse(process.env.VCAP_SERVICES)
+    log.info(process.env.VCAP_SERVICES)
+  }
+  else {
+    log.warn('VCAP_SERVICES environment variable is not set')
+  }
+}
+
 // express
 var app = express()
 app.set('port', process.env.PORT || 3000)
