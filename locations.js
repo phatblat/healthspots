@@ -7,6 +7,9 @@ var path = require('path')
 
 // logger
 var log = ibmbluemix.getLogger()
+function logDelimit() {
+  log.info('-------------------------------------------------------')
+}
 
 // initialization
 function initialize() {
@@ -50,6 +53,7 @@ app.get('/', function (request, response) {
 app.get('/facilities', function (request, response) {
   var zipcode = request.query.zipcode
 
+  logDelimit()
   log.info('Request to find facilities for: ' + zipcode)
 
   response.setHeader('Content-Type', 'application/json')
@@ -58,6 +62,7 @@ app.get('/facilities', function (request, response) {
     response.end(JSON.stringify({
       facilities: locationData
     }))
+    logDelimit()
   })
 })
 
