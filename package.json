@@ -1,0 +1,19 @@
+{
+  "name": "healthspots",
+  "version": "0.0.1",
+  "description": "Location and sentiments",
+  "main": "locations.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/phatblat/healthspots.git"
+  },
+  "author": "Ben Chatelain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phatblat/healthspots/issues"
+  },
+  "homepage": "https://github.com/phatblat/healthspots#readme"
+}
